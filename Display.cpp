@@ -3,6 +3,7 @@
 //
 
 #include "Display.h"
+using namespace std;
 
 //DO NOT DELETE UNTIL NEAR END OF PROJECT - USE AS GUIDE
 
@@ -14,3 +15,4 @@
  *Make the UI look nice
  *SFML3
  */
+
