@@ -6,7 +6,7 @@
 #define PROJECT2_HASH_TABLE_H
 
 
-
+//stores data in hash table
 class Hash_Table {
 
 };

@@ -19,6 +19,14 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(SFML)
 
+#download for json parsing
+FetchContent_Declare(
+        nlohmann_json
+        URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
+)
+
+FetchContent_MakeAvailable(nlohmann_json)
+
 #Project files/classes
 add_executable(Project2
         main.cpp
@@ -46,6 +54,7 @@ target_link_libraries(Project2 PRIVATE
     SFML::Graphics
     SFML::Window
     SFML::System
+    nlohmann_json::nlohmann_json
 
 )
 

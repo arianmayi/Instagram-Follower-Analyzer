@@ -5,7 +5,7 @@
 #ifndef PROJECT2_ANALYZER_H
 #define PROJECT2_ANALYZER_H
 
-
+//role Arian
 
 class Analyzer {
 

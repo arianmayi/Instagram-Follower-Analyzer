@@ -5,7 +5,7 @@
 #ifndef PROJECT2_RED_BLACK_H
 #define PROJECT2_RED_BLACK_H
 
-
+//stores data in red-black tree
 
 class Red_Black {
 
