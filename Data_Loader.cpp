@@ -72,6 +72,7 @@ bool Data_Loader::load_followers(const string &followers_file) {
             throw runtime_error("Error opening file: " + followers_file);
         }
 
+        //load the json file data
         json data;
         file >> data;
 
@@ -148,23 +149,65 @@ bool Data_Loader::load_followers(const string &followers_file) {
 //load following data from file
 bool Data_Loader::load_following(const string &following_file) {
 
-    ifstream file(following_file);
+    //temporary vector in case of JSON file error
+    vector<string> temp_following;
 
-    if (!file.is_open()) {
-        cout << "ERROR OPENING FILE" << endl;
+    try {
+
+        ifstream file(following_file);
+        if (!file.is_open()) {
+            throw runtime_error("Error opening file: " + following_file);
+        }
+
+        //load the json file data
+        json data;
+        file >> data;
+
+        if (!data.contains("relationships_following")) {
+            throw runtime_error("data does not contain relationships_following");
+        }
+
+        for (int i = 0; i < data["relationships_following"].size(); i++) {
+
+            if (!data[i].contains("relationships_following")) {
+                throw runtime_error("Missing relationships_following");
+            }
+
+            if (!data[i]["relationships_following"].is_array()) {
+                throw runtime_error("Expected array []");
+            }
+
+            if (!data[i]["relationships_following"].is_object()) {
+                throw runtime_error("Expected JSON obj {}");
+            }
+
+            if (!data[i]["relationship_following"][0].contains("title")) {
+                throw runtime_error("Expected title");
+            }
+
+            if (!data[i]["relationship_following"][0]["title"].is_string()) {
+                throw runtime_error("username must be a string");
+            }
+
+            if (data[i]["relationship_following"][0]["title"].empty()) {
+                throw runtime_error("missing username");
+            }
+
+            string username = (data[i]["relationship_following"][0]["title"]);
+            temp_following.push_back(username);
+        }
+    }
+    catch (const runtime_error& e) {
+        cout << "RUNTIME ERROR: " << e.what() << endl;
         return false;
     }
-
-    json data;
-    file >> data;
-
-    for (int i = 0; i < data["relationships_following"].size(); i++) {
-        string username = data["relationships_following"][i]["title"].get<std::string>();
-        following.push_back(username);
+    catch (const exception& e) {
+        cout << "GENERAL ERROR: " << e.what() << endl;
+        return false;
     }
+    following = temp_following;
     return true;
 }
-
 
 //Gets vector of follower data
 const vector<string>& Data_Loader::get_followers() const {
