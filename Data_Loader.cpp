@@ -163,37 +163,40 @@ bool Data_Loader::load_following(const string &following_file) {
         json data;
         file >> data;
 
+        if (!data.is_object()) {
+            throw runtime_error("Expected JSON obj {}.");
+        }
+
         if (!data.contains("relationships_following")) {
-            throw runtime_error("data does not contain relationships_following");
+            throw runtime_error("data does not contain relationships_following.");
+        }
+
+        if (!data["relationships_following"].is_array()) {
+            throw runtime_error("Expected array [] after relationships_following.");
+        }
+
+        if (data["relationships_following"].empty()) {
+            throw runtime_error("no information regarding relationships_following.");
         }
 
         for (int i = 0; i < data["relationships_following"].size(); i++) {
-
-            if (!data[i].contains("relationships_following")) {
-                throw runtime_error("Missing relationships_following");
+            if (!data["relationships_following"][i].is_object()) {
+                throw runtime_error("Expected JSON obj {}.");
             }
 
-            if (!data[i]["relationships_following"].is_array()) {
-                throw runtime_error("Expected array []");
+            if (!data["relationships_following"][i].contains("title")) {
+                throw runtime_error("Expected title.");
             }
 
-            if (!data[i]["relationships_following"].is_object()) {
-                throw runtime_error("Expected JSON obj {}");
+            if (!data["relationships_following"][i]["title"].is_string()) {
+                throw runtime_error("Expected a string.");
             }
 
-            if (!data[i]["relationship_following"][0].contains("title")) {
-                throw runtime_error("Expected title");
+            if (data["relationships_following"][i]["title"].empty()) {
+                throw runtime_error("Expected a user.");
             }
 
-            if (!data[i]["relationship_following"][0]["title"].is_string()) {
-                throw runtime_error("username must be a string");
-            }
-
-            if (data[i]["relationship_following"][0]["title"].empty()) {
-                throw runtime_error("missing username");
-            }
-
-            string username = (data[i]["relationship_following"][0]["title"]);
+            string username = (data["relationships_following"][i]["title"]);
             temp_following.push_back(username);
         }
     }
