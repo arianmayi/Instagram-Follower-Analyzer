@@ -30,8 +30,8 @@ class Data_Loader {
         Data_Loader();
 
         //returns true if the data was loaded/parsed correctly, else false.
-        bool load_followers(string& followers_file);
-        bool load_following(string& following_file);
+        bool load_followers(const string& followers_file);
+        bool load_following(const string& following_file);
 
         //getters for red-black & hash table build
         const vector<string>& get_followers() const;
