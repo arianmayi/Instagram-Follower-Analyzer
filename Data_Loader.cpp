@@ -13,7 +13,8 @@ using namespace std;
 
 /*
  *Purpose of this class:
- *Read the imported .json files
+ *Instagram data interpreter
+ *Read the imported .json files from instagram
  *store following and followers for separate use
  */
 
