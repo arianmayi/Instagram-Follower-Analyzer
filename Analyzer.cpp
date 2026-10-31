@@ -5,7 +5,7 @@
 #include "Analyzer.h"
 
 #include "Hash_Table.h"
-#include "Red_Black.h"
+
 
 #include <vector>
 #include <string>
@@ -22,6 +22,8 @@ void Analyzer::difference_in_followers() {
 
     //create following hash table, compare against follower vector
     Hash_Table following_table;
+
+    //clear any previous data
     difference_followers.clear();
 
     //Fills the Hash Tables for comparison
@@ -42,8 +44,13 @@ void Analyzer::difference_in_followers() {
 //Hash Table implementation
 void Analyzer::difference_in_following() {
 
+    //create follower hash table, compare against following vector
     Hash_Table follower_table;
-    difference_following.clear(); //erase any previous data
+
+    //clear any previous data
+    difference_following.clear();
+
+    //clear any previous data
     mutual.clear();
 
     //populate the follower Hash Table
@@ -58,4 +65,19 @@ void Analyzer::difference_in_following() {
             mutual.push_back(following[i]); //mutual found
         }
     }
+}
+
+//will return a vector of all users you follow that do not follow you back
+const vector<string> &Analyzer::get_difference_following() const {
+    return difference_following;
+}
+
+//will return a vector of all users who follows you & you dont follow them back
+const vector<string> &Analyzer::get_difference_followers() const {
+    return difference_followers;
+}
+
+//returns a vector containing mutual relationship amongst users (following each other)
+const vector<string> &Analyzer::get_mutual() const {
+    return mutual;
 }

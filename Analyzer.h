@@ -43,7 +43,7 @@ public:
     void difference_in_followers();
     void difference_in_following();
 
-    //return analysis results stored in vectors
+    //return analysis results stored in vectors (getter functions)
     const vector<string>& get_difference_following() const;
     const vector<string>& get_difference_followers() const;
     const vector<string>& get_mutual() const;
