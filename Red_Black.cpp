@@ -18,7 +18,7 @@ RedBlackTree::RedBlackTree() {
     root = nullptr;
 }
 
-void RedBlackTree::rotateLeft(Node *&node) {
+void RedBlackTree::rotateLeft(Node *node) {
     //Set up temporary variables
     Node *temp = node->right;
     node->right = temp->left;
@@ -42,7 +42,7 @@ void RedBlackTree::rotateLeft(Node *&node) {
     node->parent = temp;
 }
 
-void RedBlackTree::rotateRight(Node *&node) {
+void RedBlackTree::rotateRight(Node *node) {
     //Hold node in temporary varible
     Node *temp = node->left;
     node->left = temp->right;
@@ -66,13 +66,13 @@ void RedBlackTree::rotateRight(Node *&node) {
     node->parent = temp;
 }
 
-void RedBlackTree::insert(const int &data) {
-    Node *newNode = new Node(data);
+void RedBlackTree::insert(const string &username) {
+    Node *newNode = new Node(username);
     if(root == nullptr){
         //If first node, make it black
         root = newNode;
         root->color = false;
-        
+        return;
     }
     else {
         //Go through tree while correctly setting up parent node
@@ -80,11 +80,11 @@ void RedBlackTree::insert(const int &data) {
         Node *curr = root;
         while(curr != nullptr){
             parent = curr;
-            if(newNode->data > curr->data){
+            if(newNode->username > curr->username){
                 curr = curr->right;
                 
             }
-            else if(newNode->data < curr->data){
+            else if(newNode->username < curr->username){
                 curr = curr->left;
                 
             }
@@ -99,7 +99,7 @@ void RedBlackTree::insert(const int &data) {
         if(parent == nullptr){
             root = newNode;
         }
-        else if(data < parent->data){
+        else if(username < parent->username){
             parent->left = newNode;
         }
         else {
@@ -111,7 +111,7 @@ void RedBlackTree::insert(const int &data) {
     }
 }
 
-void  RedBlackTree:: insertFixup(Node *&node) {
+void  RedBlackTree:: insertFixup(Node *node) {
     //Fix the tree after insertion
    
     while(node != root && node->parent != nullptr && node->parent->color == true){
@@ -174,13 +174,13 @@ void  RedBlackTree:: insertFixup(Node *&node) {
     root->color = false;
 }
 //Check if a user exists
-bool RedBlackTree::containsUser(int data){
+bool RedBlackTree::containsUser(string username){
     Node* curr = root;
     while(curr != nullptr){
-        if(curr->data == data){
+        if(curr->username == username){
             return true;
         }
-        else if(data < curr->data){
+        else if(username < curr->username){
             curr = curr->left;
         }
         else{
@@ -193,8 +193,10 @@ bool RedBlackTree::containsUser(int data){
 void RedBlackTree::printTree(Node *root){
     
     if(root!= nullptr){
-        cout << root->data << endl;
-
+        cout << root->username << " " << 
+        (root->color ? "RED" : "BLACK") << endl;
+        
+        
         printTree(root->left);
         printTree(root->right);
     }

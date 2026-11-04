@@ -4,17 +4,19 @@
 
 #ifndef PROJECT2_RED_BLACK_H
 #define PROJECT2_RED_BLACK_H
+#include <string>
 
+using namespace std;
 
 
 struct Node {
-    int data;
+    string username;
     bool color; // true for red, false for black
     Node *left;
     Node *right;
     Node *parent;
 
-    Node(int data) : data(data), color(true), left(nullptr), right(nullptr), parent(nullptr) {}
+    Node(string username) : username(username), color(true), left(nullptr), right(nullptr), parent(nullptr) {}
 };
 
 class RedBlackTree {
@@ -25,14 +27,14 @@ public:
     //Constructor
     RedBlackTree();
     //Rotate functions
-    void rotateLeft(Node *&node);
-    void rotateRight(Node *&node);
+    void rotateLeft(Node *node);
+    void rotateRight(Node *node);
     //Inserting new nodes
-    void insert(const int &data);
+    void insert(const string &username);
     //Balance the tree after insertion
-    void insertFixup(Node *&node);
+    void insertFixup(Node *node);
     void printTree(Node *root);
-    bool containsUser(int data);
+    bool containsUser(const string &username);
 };
 
 
