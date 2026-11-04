@@ -174,7 +174,7 @@ void  RedBlackTree:: insertFixup(Node *node) {
     root->color = false;
 }
 //Check if a user exists
-bool RedBlackTree::containsUser(string username){
+bool RedBlackTree::containsUser(const string &username){
     Node* curr = root;
     while(curr != nullptr){
         if(curr->username == username){
@@ -196,7 +196,7 @@ void RedBlackTree::printTree(Node *root){
         cout << root->username << " " << 
         (root->color ? "RED" : "BLACK") << endl;
         
-        
+
         printTree(root->left);
         printTree(root->right);
     }

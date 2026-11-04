@@ -5,8 +5,186 @@
 
 #include "Analyzer.h"
 #include "Data_Generator.h"
+#include "Red_Black.h"
 
 using namespace std;
+
+
+void testRedBlackTree() {
+    cout << "\n========== RED-BLACK TREE TESTS ==========\n";
+
+    int passed = 0;
+    int total = 0;
+
+    // Helper for printing test results
+    auto check = [&](const string& name, bool result) {
+        total++;
+
+        if (result) {
+            passed++;
+        }
+
+        cout << name << ": "
+             << (result ? "PASSED" : "FAILED") << endl;
+    };
+
+    // TEST 4: Empty tree
+    {
+        RedBlackTree tree;
+
+        check("Empty Tree",
+              !tree.containsUser("Alex"));
+    }
+
+    // TEST 5: Single node
+    {
+        RedBlackTree tree;
+        tree.insert("Alex");
+
+        check("Single Node",
+              tree.containsUser("Alex") &&
+              !tree.containsUser("Brian"));
+    }
+
+    // TEST 6: Left-Left rotation
+    {
+        RedBlackTree tree;
+
+        tree.insert("Charlie");
+        tree.insert("Brian");
+        tree.insert("Alex");
+
+        check("LL Rotation",
+              tree.containsUser("Charlie") &&
+              tree.containsUser("Brian") &&
+              tree.containsUser("Alex"));
+    }
+
+    // TEST 7: Right-Right rotation
+    {
+        RedBlackTree tree;
+
+        tree.insert("Alex");
+        tree.insert("Brian");
+        tree.insert("Charlie");
+
+        check("RR Rotation",
+              tree.containsUser("Alex") &&
+              tree.containsUser("Brian") &&
+              tree.containsUser("Charlie"));
+    }
+
+    // TEST 8: Left-Right rotation
+    {
+        RedBlackTree tree;
+
+        tree.insert("Charlie");
+        tree.insert("Alex");
+        tree.insert("Brian");
+
+        check("LR Rotation",
+              tree.containsUser("Charlie") &&
+              tree.containsUser("Alex") &&
+              tree.containsUser("Brian"));
+    }
+
+    // TEST 9: Right-Left rotation
+    {
+        RedBlackTree tree;
+
+        tree.insert("Alex");
+        tree.insert("Charlie");
+        tree.insert("Brian");
+
+        check("RL Rotation",
+              tree.containsUser("Alex") &&
+              tree.containsUser("Charlie") &&
+              tree.containsUser("Brian"));
+    }
+
+    // TEST 10: Duplicate usernames
+    {
+        RedBlackTree tree;
+
+        tree.insert("Alex");
+        tree.insert("Alex");
+        tree.insert("Brian");
+        tree.insert("Brian");
+
+        check("Duplicate Insertions",
+              tree.containsUser("Alex") &&
+              tree.containsUser("Brian") &&
+              !tree.containsUser("Charlie"));
+    }
+
+    // TEST 11: Recoloring
+    {
+        RedBlackTree tree;
+
+        tree.insert("David");
+        tree.insert("Brian");
+        tree.insert("Frank");
+        tree.insert("Alex");
+
+        check("Recoloring",
+              tree.containsUser("David") &&
+              tree.containsUser("Brian") &&
+              tree.containsUser("Frank") &&
+              tree.containsUser("Alex"));
+    }
+
+    // TEST 12: Sorted insertion
+    {
+        RedBlackTree tree;
+
+        for (int i = 0; i < 1000; i++) {
+            tree.insert("user_" + to_string(i));
+        }
+
+        bool valid = true;
+
+        for (int i = 0; i < 1000; i++) {
+            if (!tree.containsUser("user_" + to_string(i))) {
+                valid = false;
+                break;
+            }
+        }
+
+        check("Sorted Insertions", valid);
+    }
+
+    // TEST 13: Large randomized dataset
+    {
+        RedBlackTree tree;
+        Data_Generator generator;
+
+        vector<string> followers;
+        vector<string> following;
+
+        generator.generateData(10000, followers, following);
+
+        for (const string& username : followers) {
+            tree.insert(username);
+        }
+
+        bool valid = true;
+
+        for (const string& username : followers) {
+            if (!tree.containsUser(username)) {
+                valid = false;
+                break;
+            }
+        }
+
+        check("10,000 Random Usernames", valid);
+    }
+
+    cout << "\nRed-Black Tree Results: "
+         << passed << "/" << total
+         << " tests passed.\n";
+}
+
+
 
 int main() {
 
@@ -103,5 +281,8 @@ int main() {
              : "ONE OR MORE TESTS FAILED!")
          << endl;
 
+    testRedBlackTree();
+
     return (test1Passed && test2Passed && test3Passed) ? 0 : 1;
+    
 }
