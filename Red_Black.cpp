@@ -3,16 +3,9 @@
 //
 #include <iostream>
 #include "Red_Black.h"
+#include <vector>
 using namespace std;
 
-//DO NOT DELETE UNTIL NEAR END OF PROJECT - USE AS GUIDE
-
-/*
- *Vitor's part
- *Red-Black implantation, where the data will be stored
- *
- *
- */
 //Constructor
 RedBlackTree::RedBlackTree() {
     root = nullptr;
@@ -43,7 +36,7 @@ void RedBlackTree::rotateLeft(Node *node) {
 }
 
 void RedBlackTree::rotateRight(Node *node) {
-    //Hold node in temporary varible
+    //Hold node in temporary variable
     Node *temp = node->left;
     node->left = temp->right;
 
@@ -112,65 +105,71 @@ void RedBlackTree::insert(const string &username) {
 }
 
 void  RedBlackTree:: insertFixup(Node *node) {
-    //Fix the tree after insertion
-   
-    while(node != root && node->parent != nullptr && node->parent->color == true){
-        //Declare needed nodes.
-        Node *parent = node->parent;
-        Node *grandparent = node->parent->parent;
 
-        if(grandparent == nullptr){
+    //fix violations after insertion
+    while (node != root && node->parent != nullptr && node->parent->color == true) {
+        Node *parent = node->parent;
+        Node *grandparent = parent->parent;
+
+        if (grandparent == nullptr) {
             break;
         }
-        //Declara uncle to decide what case it is
 
-        Node *uncle;
+        //case if parent is the left child
+        if (parent == grandparent->left) {
 
-        if(parent == grandparent->left){
-            uncle = grandparent->right;
-        }
-        else {
-            uncle = grandparent->left;
-        }
-        //Color Change
-        if(uncle != nullptr && uncle->color == true){
-            //Uncle red
-            parent->color = false;
-            uncle->color = false;
-            grandparent->color = true;
+            Node *uncle = grandparent->right;
 
-            node = grandparent;
-        }
-        else{
-            //Parent is in the left
-            if(parent == grandparent->left){
-                //LR
-                if(node == parent->right){
-                    rotateLeft(parent);
-                    //Always update parent
-                    parent = node;
-                }
-            
-            //LL
-            parent->color = false;
-            grandparent->color = true;
-            rotateRight(grandparent);
-        }
-        else{
-                //RL
-                if(node == parent->left){
-                    rotateRight(parent);
-                    parent = node;
-                }
-                //RR
+            //uncle is red (recolor)
+            if (uncle != nullptr && uncle->color == true) {
                 parent->color = false;
+                uncle->color = false;
                 grandparent->color = true;
 
-                rotateLeft(grandparent);
+                node = grandparent;
+            }
+            else {
+
+                //LR case
+                if (node == parent->right) {
+                    node = parent;
+                    rotateLeft(node);
+                }
+
+                //LL case
+                node->parent->color = false;
+                node->parent->parent->color = true;
+                rotateRight(node->parent->parent);
+            }
+        }
+        //case if parent is the right child
+        else {
+
+            Node *uncle = grandparent->left;
+            if (uncle != nullptr && uncle->color == true) {
+
+                parent->color = false;
+                uncle->color = false;
+                grandparent->color = true;
+                node = grandparent;
+            }
+            else {
+
+                //RL case
+                if (node == parent->left) {
+                    node = parent;
+                    rotateRight(node);
+                }
+
+                //RR case
+                node->parent->color = false;
+                node->parent->parent->color = true;
+                rotateLeft(node->parent->parent);
             }
         }
     }
-    //Root is always black
+
+    //root stays black
     root->color = false;
 }
 //Check if a user exists
@@ -200,5 +199,32 @@ void RedBlackTree::printTree(Node *root){
         printTree(root->left);
         printTree(root->right);
     }
+}
+
+//destructor
+RedBlackTree::~RedBlackTree() {
+
+    vector<Node*> nodes;
+
+    if (root != nullptr) {
+        nodes.push_back(root);
+    }
+
+    //DFS to delete all nodes
+    while (!nodes.empty()) {
+        Node* current = nodes.back();
+        nodes.pop_back();
+
+        if (current->left != nullptr) {
+            nodes.push_back(current->left);
+        }
+
+        if (current->right != nullptr) {
+            nodes.push_back(current->right);
+        }
+
+        delete current;
+    }
+    root = nullptr;
 }
 

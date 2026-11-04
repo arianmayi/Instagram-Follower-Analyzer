@@ -23,22 +23,33 @@ class RedBlackTree {
 private:
     Node *root;
 
+    //rotations
+    void rotateLeft(Node* node);
+    void rotateRight(Node* node);
+
+    //fix if unbalanced (& if color is off)
+    void insertFixup(Node* node);
+
 public:
     //Constructor
     RedBlackTree();
-    //Rotate functions
-    void rotateLeft(Node *node);
-    void rotateRight(Node *node);
+
+    //Destructor
+    ~RedBlackTree();
+
     //Inserting new nodes
     void insert(const string &username);
-    //Balance the tree after insertion
-    void insertFixup(Node *node);
-    void printTree(Node *root);
+
+    //Determines if the tree contains a user
     bool containsUser(const string &username);
+
+    //Debug tool
+    void printTree(Node *root);
+
+    //prevents copying the red-black tree to multiple objects pointing to the same node
+    //which could cause a double deletion
+    RedBlackTree(const RedBlackTree&) = delete;
+    RedBlackTree& operator = (const RedBlackTree&) = delete;
 };
-
-
-
-//stores data in red-black tree
 
 #endif
