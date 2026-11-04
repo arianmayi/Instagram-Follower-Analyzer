@@ -31,8 +31,8 @@ public:
     void insert(const int &data);
     //Balance the tree after insertion
     void insertFixup(Node *&node);
-    
-    
+    void printTree(Node *root);
+    bool containsUser(int data);
 };
 
 

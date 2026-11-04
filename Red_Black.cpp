@@ -1,8 +1,9 @@
 //
 // Created by arian on 10/15/2026.
 //
-
+#include <iostream>
 #include "Red_Black.h"
+using namespace std;
 
 //DO NOT DELETE UNTIL NEAR END OF PROJECT - USE AS GUIDE
 
@@ -12,12 +13,13 @@
  *
  *
  */
-
+//Constructor
 RedBlackTree::RedBlackTree() {
     root = nullptr;
 }
 
 void RedBlackTree::rotateLeft(Node *&node) {
+    //Set up temporary variables
     Node *temp = node->right;
     node->right = temp->left;
 
@@ -37,7 +39,7 @@ void RedBlackTree::rotateLeft(Node *&node) {
     }
 
     temp->left = node;
-    root->parent = temp;
+    node->parent = temp;
 }
 
 void RedBlackTree::rotateRight(Node *&node) {
@@ -61,7 +63,7 @@ void RedBlackTree::rotateRight(Node *&node) {
     }
 
     temp->right = node;
-    temp->parent = temp;
+    node->parent = temp;
 }
 
 void RedBlackTree::insert(const int &data) {
@@ -148,14 +150,13 @@ void  RedBlackTree:: insertFixup(Node *&node) {
                     //Always update parent
                     parent = node;
                 }
-            }
+            
             //LL
             parent->color = false;
             grandparent->color = true;
             rotateRight(grandparent);
-            }
-            //Parent is in the right
-            else{
+        }
+        else{
                 //RL
                 if(node == parent->left){
                     rotateRight(parent);
@@ -167,8 +168,35 @@ void  RedBlackTree:: insertFixup(Node *&node) {
 
                 rotateLeft(grandparent);
             }
-        
+        }
+    }
     //Root is always black
     root->color = false;
+}
+//Check if a user exists
+bool RedBlackTree::containsUser(int data){
+    Node* curr = root;
+    while(curr != nullptr){
+        if(curr->data == data){
+            return true;
+        }
+        else if(data < curr->data){
+            curr = curr->left;
+        }
+        else{
+            curr = curr->right;
+        }
+    }
+    return false;
+}
+//For testing and printing out tree
+void RedBlackTree::printTree(Node *root){
+    
+    if(root!= nullptr){
+        cout << root->data << endl;
+
+        printTree(root->left);
+        printTree(root->right);
+    }
 }
 
