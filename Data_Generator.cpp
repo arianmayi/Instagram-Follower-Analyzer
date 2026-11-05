@@ -63,11 +63,11 @@ void Data_Generator::generateData(size_t total, vector<string>& datasetA, vector
     }
 
     //safety check to keep % values between 0 and 100
-    if (overlapPercentage < 0) {
-        overlapPercentage = 0;
+    if (overlapPercent < 0) {
+        overlapPercent = 0;
     }
-    if (overlapPercentage > 100) {
-        overlapPercentage = 100;
+    if (overlapPercent > 100) {
+        overlapPercent = 100;
     }
 
     //overlap = what user inputs and/or from random
