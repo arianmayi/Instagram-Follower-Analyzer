@@ -16,13 +16,17 @@ using namespace std;
 
 class Data_Generator {
 private:
-    int overlapPercentage;
+    int overlapPercentage = 0;
     string generateUser();
 
 public:
     Data_Generator();
 
     void generateData(size_t total, vector<string>& datasetA, vector<string>& datasetB);
+
+    void generateData(size_t total, vector<string>& datasetA, vector<string>& datasetB, int overlapPercentage);
+
+    int getOverlapPercentage() const;
 };
 
 

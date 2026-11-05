@@ -39,8 +39,14 @@ string Data_Generator::generateUser() {
     return username;
 }
 
-//generates and inputs users into both datasets with some overlap
 void Data_Generator::generateData(size_t total, vector<string>& datasetA, vector<string>& datasetB) {
+    //randomly chooses a percentage to affect dataset A
+    uniform_int_distribution<> percent(0, 100);
+    generateData(total, datasetA, datasetB, percent(rng));
+}
+
+//generates and inputs users into both datasets with some overlap
+void Data_Generator::generateData(size_t total, vector<string>& datasetA, vector<string>& datasetB, int overlapPercent) {
     //clears datasets when called again for multiple uses (just in case)
     datasetA.clear();
     datasetB.clear();
@@ -56,9 +62,16 @@ void Data_Generator::generateData(size_t total, vector<string>& datasetA, vector
         }
     }
 
-    //randomly chooses a percentage to affect dataset A
-    uniform_int_distribution<> percent(0,100);
-    overlapPercentage = percent(rng);
+    //safety check to keep % values between 0 and 100
+    if (overlapPercentage < 0) {
+        overlapPercentage = 0;
+    }
+    if (overlapPercentage > 100) {
+        overlapPercentage = 100;
+    }
+
+    //overlap = what user inputs and/or from random
+    this->overlapPercentage = overlapPercent;
     //calculates the percentage into the total size
     size_t overlapCount = (total * overlapPercentage) / 100;
 
@@ -78,4 +91,8 @@ void Data_Generator::generateData(size_t total, vector<string>& datasetA, vector
             datasetB.push_back(username);
         }
     }
+}
+
+int Data_Generator::getOverlapPercentage() const {
+    return overlapPercentage;
 }
