@@ -19,6 +19,16 @@ using namespace std;
  *Compare Hash Table & Red-Black Tree performance
  */
 
+
+//used for benchmark performance.
+//allows for multiple variables to be returned from one function
+struct BenchMarkResults {
+    double hash_insert_ms;
+    double hash_search_ms;
+    double RB_insert_ms;
+    double RB_search_ms;
+};
+
 class Analyzer {
 
     private:
@@ -29,9 +39,14 @@ class Analyzer {
     vector<string> following;
 
     //stores the results from relationship comparison
-    vector<string> difference_following; //users you follow who don't follow you back
-    vector<string> difference_followers; //users who follow you but you don't follow back
-    vector<string> mutual; //users who follow each other
+    vector<string> difference_following_hash; //users you follow who don't follow you back
+    vector<string> difference_followers_hash; //users who follow you but you don't follow back
+    vector<string> mutual_hash; //users who follow each other
+
+    //Red-Black version
+    vector<string> difference_following_RB; //users you follow who don't follow you back
+    vector<string> difference_followers_RB;//users who follow you but you don't follow back
+    vector<string> mutual_RB; //users who follow each other
 
 
 public:
@@ -40,16 +55,26 @@ public:
     Analyzer(const vector<string>& followers, const vector<string>& following);
 
    //Analysis user relationship
-    void difference_in_followers();
-    void difference_in_following();
+    void difference_in_followers_HASH();
+    void difference_in_following_HASH();
+
+    void difference_in_followers_RB();
+    void difference_in_following_RB();
 
     //return analysis results stored in vectors (getter functions)
-    const vector<string>& get_difference_following() const;
-    const vector<string>& get_difference_followers() const;
-    const vector<string>& get_mutual() const;
+
+    //Hash table
+    const vector<string>& get_difference_following_hash() const;
+    const vector<string>& get_difference_followers_hash() const;
+    const vector<string>& get_mutual_hash() const;
+
+    //Red-Black
+    const vector<string>& get_difference_following_RB() const;
+    const vector<string>& get_difference_followers_RB() const;
+    const vector<string>& get_mutual_RB() const;
 
     //Benchmark Hash Table vs. Red-Black Tree
-    void benchMark_Performance();
+    BenchMarkResults benchMark_Performance();
 
 };
 
