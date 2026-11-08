@@ -1,16 +1,16 @@
-Purpose of the project:
--Determine relationship status with your Instagram data.
--Determines the number of users you follow.
--Determines the number of users that follow you.
--Determines mutual (users you follow and follow you back).
--Determines who you follow that does not follow you back.
+#Instagram Follower Analyzer:
+##Purpose of the project
+The Instagram Follower Analyzer is an application that allows users to analyze their Instagram followers and following lists. It compares two custom-built data structures, a Hash Table and a Red-Black Tree, to determine follower relationships and evaluate the performance between data structures.
 
-Reasoning for the project:
--As a group, we realized that many people always wonder who they follow on Instagram may not follow them back. This application answers that question using Hash Tables and Red-Black implementation.
+The application features a graphical user interface built using SFML 3, allowing users to upload their Instagram data or generate randomized datasets for testing.
 
-How do I use this application?
-option 1 - using your personal data (recommended to do this on a laptop/desktop):
--Open Instagram and navigate to settings -> account center.
--Select your "information and Permissions" -> export your information
--Select "Export to device" and choose some of your information or the option to select specific information (second option is optimal)
+##Purpose of the Project
+The application determines:
+- The total number of accounts following you.
+- The total number of accounts you follow.
+- Accounts you follow that do not follow you back.
+- Mutual followers (accounts where both users follow each other).
+- The performance differences between Hash Table and Red-Black Tree insertion and search operations.
 
+##Motivation
+As a group, we realized that many Instagram users are curious about which accounts they follow that do not follow them back.
