@@ -5,6 +5,7 @@
 
 #include "Analyzer.h"
 #include "Data_Generator.h"
+#include "Display.h"
 
 using namespace std;
 
@@ -68,5 +69,6 @@ int main() {
     cout << "Red-Black Insert: " << results.RB_insert_ms << "ms" << endl;
     cout << "Red-Black Search: " << results.RB_search_ms << "ms" << endl;
 
-
+    Display display;
+    display.run();
 }
