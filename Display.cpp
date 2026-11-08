@@ -673,7 +673,7 @@ void Display::drawHelp() {
 
     instructions.setCharacterSize(21);
     instructions.setLineSpacing(1.15f);
-    instructions.setPosition({290.f,310.f});
+    instructions.setPosition({290.f,225.f});
     instructions.setFillColor(sf::Color(220,225,240));
     window.draw(instructions);
 
@@ -681,7 +681,7 @@ void Display::drawHelp() {
     sf::Text closeText(font);
     closeText.setString("Click ? again to return to dashboard");
     closeText.setCharacterSize(18);
-    closeText.setPosition({290.f,780.f});
+    closeText.setPosition({290.f,775.f});
     closeText.setFillColor(sf::Color(100,200,255));
     window.draw(closeText);
 }
