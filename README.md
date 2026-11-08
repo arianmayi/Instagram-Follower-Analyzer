@@ -1,4 +1,4 @@
-# Instagram Follower Analyzer:
+# Instagram Follower Analyzer (ONLY WORKS FOR WINDOWS DUE TO WINDOWS API USED TO BROWSE JSON FILES): 
 
 ## Project Overview:
 
