@@ -39,7 +39,9 @@ In the application, select LOAD JSON, choose your followers file (ORDER MATTERS)
 
 ## Option 2: Generated Data (FOR COMPLEXITY COMPARISON - LARGER DATA SETS)
 
-Enter a dataset size (100 - 100,000). Click Generate Data, then Analyze Followers.
+Enter a dataset size (100 - 100,000) and an overlap percentage (0 - 100%) to control how many usernames are shared between the followers and following datasets.
+
+Click Generate Data, analyze Followers.
 
 ## Results
 
