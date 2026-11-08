@@ -18,3 +18,6 @@ The application determines:
 Motivation
 
 As a group, we realized that many Instagram users are curious about which accounts they follow that do not follow them back.
+
+Our application addresses this question while demonstrating how two different data structures can solve the same problem with different performance times. 
+
