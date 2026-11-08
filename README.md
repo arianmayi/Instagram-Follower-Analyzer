@@ -23,7 +23,7 @@ The project uses CMake with SFML 3 and nlohmann/json
 
 ## How to Use the Application
 
-IMPORTANT: In CLion, set the project2 run configurations working directory to $ProjectFileDir$ to ensure the application loads the font from the assets folder correctly. (Ignore if no error was found when building)
+IMPORTANT: In CLion, set the project2 run configurations working directory to $ProjectFileDir$ to ensure the application loads the font from the assets folder correctly. (Only necessary if the application encounters a font-loading error when running)
 
 ## Option 1: Instagram Data (Recommended)
 
