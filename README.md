@@ -1,10 +1,12 @@
-# Instagram Follower Analyzer (ONLY WORKS FOR WINDOWS DUE TO WINDOWS API USED TO BROWSE JSON FILES): 
+# Instagram Follower Analyzer: 
 
 ## Project Overview:
 
 The Instagram Follower Analyzer is an application that allows users to analyze their Instagram followers and following lists. It compares two custom-built data structures, a Hash Table and a Red-Black Tree, to determine follower relationships and evaluate the performance between data structures.
 
 The application features a graphical user interface built using SFML 3, allowing users to upload their Instagram data or generate randomized datasets for testing.
+
+(ONLY WORKS FOR WINDOWS DUE TO WINDOWS API USED TO BROWSE JSON FILES)
 
 ## Purpose of the Project - Features
 
