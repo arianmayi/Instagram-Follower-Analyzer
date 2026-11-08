@@ -2,21 +2,51 @@
 // Created by arian on 10/15/2026.
 //
 
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
+#include <windows.h>
+#include <commdlg.h>
+
 #include "Display.h"
+
 #include <algorithm>
 #include <stdexcept>
+#include <optional>
+
 using namespace std;
 
-//DO NOT DELETE UNTIL NEAR END OF PROJECT - USE AS GUIDE
+namespace {
+    optional<string> selectJsonFile(const char* dialogTitle) {
 
-/*
- *Ngoc, this is your part of the project
- *Simple display
- *Draw Buttons, detect user clicks
- *Display totals
- *Make the UI look nice
- *SFML3
- */
+        //stores the path selected by user
+        char filePath[32768] = {};
+
+        //configure the windows file selection
+        OPENFILENAMEA dialog = {};
+        dialog.lStructSize = sizeof(dialog);
+        dialog.lpstrFile = filePath;
+        dialog.nMaxFile = sizeof(filePath);
+
+        //only show JSON files
+        dialog.lpstrFilter = "JSON Files (*.json)\0*.json\0"
+        "All Files (*.*)\0*,*\0";
+
+        dialog.nFilterIndex = 1;
+        dialog.lpstrTitle = dialogTitle;
+
+        //only allow existing files and preserve the working directory
+        dialog.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST|OFN_PATHMUSTEXIST|OFN_NOCHANGEDIR;
+
+        if (!GetOpenFileNameA(&dialog)) {
+            return nullopt;
+        }
+
+        //return selected file path
+        return string(filePath);
+    }
+}
 
 Display::Display() : window(sf::VideoMode({1400, 1050}), "Instagram Follower Analyzer"),
                      titleText(font), subtitleText(font), statusText(font), loadText(font), generateText(font),
@@ -24,9 +54,15 @@ Display::Display() : window(sf::VideoMode({1400, 1050}), "Instagram Follower Ana
                      card2Text(font), card3Text(font), followersTotalText(font), followingTotalText(font),
                      resultsTitle(font), benchmarkTitle(font), notFollowingTabText(font), dontFollowTabText(font),
                      mutualTabText(font), datasetLabel(font), datasetInputText(font) {
-    if (!font.openFromFile("../assets/Inter_18pt-Regular.ttf")) {
+    if (!font.openFromFile("assets/Inter_18pt-Regular.ttf")) {
         throw runtime_error("Failed to load font");
     }
+
+    helpButton.setSize({45.f, 40.f});
+    helpButton.setPosition({1290.f,55.f});
+    helpButton.setFillColor(sf::Color(45,55,100));
+    helpButton.setOutlineThickness(1.f);
+    helpButton.setOutlineColor(sf::Color::White);
 
     dashboardPanel.setSize({1360.f, 1000.f});
     dashboardPanel.setPosition({20.f, 20.f});
@@ -244,6 +280,19 @@ void Display::processEvents() {
         }
         if (const auto* mouse = event->getIf<sf::Event::MouseButtonPressed>()) {
             sf::Vector2f mousePos = window.mapPixelToCoords({mouse->position.x, mouse->position.y});
+
+            //open or close help menu when user clicks the "?" button
+
+            if (buttonPressed(helpButton,mousePos)) {
+                showHelp = !showHelp;
+                continue;
+            }
+
+            //prevents other buttons from being clicked while help is open
+            if (showHelp) {
+                continue;
+            }
+
             if (buttonPressed(loadButton, mousePos)) {
                 loadJsonData();
             }
@@ -442,6 +491,12 @@ void Display::drawBenchmark() {
     window.draw(benchmarkPanel);
     window.draw(benchmarkTitle);
 
+    //does not display the following/followers/mutual data until analyzer has finished
+    //the comparison & benchmark
+    if (!analyzer) {
+        return;
+    }
+
     window.draw(hashCard);
     window.draw(treeCard);
 
@@ -504,6 +559,21 @@ void Display::render() {
     drawUsernameList();
     drawBenchmark();
 
+    if (showHelp) {
+        drawHelp();
+    }
+
+    //draw help button
+    window.draw(helpButton);
+
+    //draw the question mark inside help button
+    sf::Text helpText(font);
+    helpText.setString("?");
+    helpText.setCharacterSize(30);
+    helpText.setFillColor(sf::Color::White);
+    helpText.setPosition({1303.f,55.f});
+    window.draw(helpText);
+
     window.display();
 }
 
@@ -520,24 +590,98 @@ bool Display::buttonPressed(const sf::RectangleShape& button, sf::Vector2f mouse
     return button.getGlobalBounds().contains(mousePos);
 }
 
+//SMFL display JSON files & generated data
 void Display::loadJsonData() {
-    currentView = ListView::NOT_FOLLOWING_BACK;
 
-    bool followersLoaded = loader.load_followers("files/followers.json");
-    bool followingLoaded = loader.load_following("files/following.json");
+    //followers JSON file
+    optional<string> followersPath = selectJsonFile("Select your Instagram Followers JSON file");
+
+    if (!followersPath) {
+        return;
+    }
+
+    //following JSON file
+    optional<string> followingPath = selectJsonFile("Select your Instagram following JSON file");
+
+    if (!followingPath) {
+        return;
+    }
+
+    //temporary loader so failed imports don't overwrite the previously loaded datasets
+    Data_Loader newLoader;
+
+    bool followersLoaded = newLoader.load_followers(*followersPath);
+    bool followingLoaded = newLoader.load_following(*followingPath);
+
+    if (!followersLoaded || !followingLoaded) {
+        statusText.setFillColor(sf::Color::Red);
+        statusText.setString("Failed to load Instagram JSON files");
+        return;
+    }
+
+    //stores successful JSON files
+    followers = newLoader.get_followers();
+    following = newLoader.get_following();
 
     analyzer.reset();
     scrollOffset = 0;
+    currentView = ListView::NOT_FOLLOWING_BACK;
 
-    if (followersLoaded && followingLoaded) {
-        followers = loader.get_followers();
-        following = loader.get_following();
+    statusText.setFillColor(sf::Color::Green);
+    statusText.setString("JSON files loaded successfully");
+}
 
-        statusText.setFillColor(sf::Color::Green);
-        statusText.setString("Loaded: " + to_string(followers.size()) + " followers and " + to_string(following.size()) + " following");
-    }
-    else {
-        statusText.setFillColor(sf::Color::Red);
-        statusText.setString("Failed to load JSON files");
-    }
+//help function that helps users understand how the app works
+void Display::drawHelp() {
+    //Darken the dashboard while help is open
+    sf::RectangleShape overlay({1400.f, 1050.f});
+    overlay.setFillColor(sf::Color(0,0,0,190));
+    window.draw(overlay);
+
+    //help panel
+    sf::RectangleShape panel({900.f,640.f});
+    panel.setPosition({250.f,190.f});
+    panel.setFillColor(sf::Color(20,25,65));
+    panel.setOutlineThickness(2.f);
+    panel.setOutlineColor(sf::Color(80,110,200));
+    window.draw(panel);
+
+    //help title
+    sf::Text title(font);
+    title.setString("How to use Instagram Follower Analyzer");
+    title.setCharacterSize(30);
+    title.setFillColor(sf::Color::White);
+    window.draw(title);
+
+    sf::Text instructions(font);
+
+    //simple instructions
+    instructions.setString(
+    "1. LOAD JSON\n"
+    "   Select your Instagram followers and following JSON files (FOLLOWER FILE FIRST).\n\n"
+    "2. GENERATE DATA\n"
+    "   Or enter a dataset size and generate sample usernames.\n\n"
+    "3. ANALYZE FOLLOWERS\n"
+    "   Click Analyze Followers to compare the datasets.\n\n"
+    "4. VIEW RESULTS\n"
+    "   Click the pink, purple, or blue tabs to switch lists.\n"
+    "   Use your mouse wheel to scroll through usernames.\n\n"
+    "5. PERFORMANCE COMPARISON\n"
+    "   Compare Hash Table and Red-Black Tree execution times.\n"
+    "   Lower execution time means faster performance."
+    );
+
+    instructions.setCharacterSize(21);
+    instructions.setLineSpacing(1.15f);
+    instructions.setPosition({290.f,310.f});
+    instructions.setFillColor(sf::Color(220,225,240));
+    window.draw(instructions);
+
+    //tells user how to close the help panel
+    sf::Text closeText(font);
+    closeText.setString("Click ? again to return to dashboard");
+    closeText.setCharacterSize(18);
+    closeText.setPosition({290.f,780.f});
+    closeText.setFillColor(sf::Color(100,200,255));
+    window.draw(closeText);
 }

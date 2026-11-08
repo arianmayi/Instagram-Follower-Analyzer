@@ -87,6 +87,10 @@ private:
     sf::Text datasetLabel;
     sf::Text datasetInputText;
 
+    //Help menu
+    sf::RectangleShape helpButton;
+    bool showHelp = false;
+
     string datasetInput = "50000";
     bool enteringDatasetSize = false;
     bool firstDatasetClick = true;
@@ -107,6 +111,7 @@ private:
     void performAnalysis();
     bool buttonPressed(const sf::RectangleShape& button, sf::Vector2f mousePos);
     void loadJsonData();
+    void drawHelp();
 };
 
 #endif //PROJECT2_DISPLAY_H

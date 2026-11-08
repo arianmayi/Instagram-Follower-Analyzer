@@ -55,7 +55,10 @@ target_link_libraries(Project2 PRIVATE
     SFML::Window
     SFML::System
     nlohmann_json::nlohmann_json
-
 )
+
+if(WIN32)
+    target_link_libraries(Project2 PRIVATE comdlg32)
+endif()
 
 
