@@ -16,4 +16,5 @@ The application determines:
 - The performance differences between Hash Table and Red-Black Tree insertion and search operations.
 
 Motivation
+
 As a group, we realized that many Instagram users are curious about which accounts they follow that do not follow them back.
