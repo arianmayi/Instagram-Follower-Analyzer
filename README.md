@@ -1,10 +1,11 @@
-#Instagram Follower Analyzer:
-##Purpose of the project
+Instagram Follower Analyzer:
+
+Purpose of the project
 The Instagram Follower Analyzer is an application that allows users to analyze their Instagram followers and following lists. It compares two custom-built data structures, a Hash Table and a Red-Black Tree, to determine follower relationships and evaluate the performance between data structures.
 
 The application features a graphical user interface built using SFML 3, allowing users to upload their Instagram data or generate randomized datasets for testing.
 
-##Purpose of the Project
+Purpose of the Project
 The application determines:
 - The total number of accounts following you.
 - The total number of accounts you follow.
@@ -12,5 +13,5 @@ The application determines:
 - Mutual followers (accounts where both users follow each other).
 - The performance differences between Hash Table and Red-Black Tree insertion and search operations.
 
-##Motivation
+Motivation
 As a group, we realized that many Instagram users are curious about which accounts they follow that do not follow them back.
