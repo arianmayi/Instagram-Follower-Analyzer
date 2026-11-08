@@ -7,6 +7,7 @@ The Instagram Follower Analyzer is an application that allows users to analyze t
 The application features a graphical user interface built using SFML 3, allowing users to upload their Instagram data or generate randomized datasets for testing.
 
 Purpose of the Project
+
 The application determines:
 - The total number of accounts following you.
 - The total number of accounts you follow.
