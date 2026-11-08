@@ -39,9 +39,6 @@ private:
     sf::RectangleShape generateButton;
     sf::RectangleShape analyzeButton;
 
-    sf::RectangleShape loadFollowersButton;
-    sf::RectangleShape loadFollowingButton;
-
     sf::RectangleShape card1;
     sf::RectangleShape card2;
     sf::RectangleShape card3;
@@ -58,9 +55,6 @@ private:
     sf::Text loadText;
     sf::Text generateText;
     sf::Text analyzeText;
-
-    sf::Text loadFollowersText;
-    sf::Text loadFollowingText;
 
     sf::Text card1Text;
     sf::Text card2Text;
@@ -87,13 +81,22 @@ private:
     sf::Text datasetLabel;
     sf::Text datasetInputText;
 
-    //Help menu
-    sf::RectangleShape helpButton;
-    bool showHelp = false;
-
     string datasetInput = "50000";
     bool enteringDatasetSize = false;
     bool firstDatasetClick = true;
+
+    sf::RectangleShape overlapInputBox;
+
+    sf::Text overlapLabel;
+    sf::Text overlapInputText;
+
+    string overlapInput = "25";
+    bool enteringOverlap = false;
+    bool firstOverlapClick = true;
+
+    //Help menu
+    sf::RectangleShape helpButton;
+    bool showHelp = false;
 
     ListView currentView = ListView::NOT_FOLLOWING_BACK;
 

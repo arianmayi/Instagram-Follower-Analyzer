@@ -50,17 +50,17 @@ namespace {
 
 Display::Display() : window(sf::VideoMode({1400, 1050}), "Instagram Follower Analyzer"),
                      titleText(font), subtitleText(font), statusText(font), loadText(font), generateText(font),
-                     analyzeText(font), loadFollowersText(font), loadFollowingText(font), card1Text(font),
-                     card2Text(font), card3Text(font), followersTotalText(font), followingTotalText(font),
-                     resultsTitle(font), benchmarkTitle(font), notFollowingTabText(font), dontFollowTabText(font),
-                     mutualTabText(font), datasetLabel(font), datasetInputText(font) {
+                     analyzeText(font), card1Text(font), card2Text(font), card3Text(font), followersTotalText(font),
+                     followingTotalText(font), resultsTitle(font), benchmarkTitle(font), notFollowingTabText(font),
+                     dontFollowTabText(font), mutualTabText(font), datasetLabel(font), datasetInputText(font),
+                     overlapLabel(font), overlapInputText(font) {
     if (!font.openFromFile("assets/Inter_18pt-Regular.ttf")) {
         throw runtime_error("Failed to load font");
     }
 
     helpButton.setSize({45.f, 40.f});
-    helpButton.setPosition({1290.f,55.f});
-    helpButton.setFillColor(sf::Color(45,55,100));
+    helpButton.setPosition({1290.f, 55.f});
+    helpButton.setFillColor(sf::Color(45, 55, 100));
     helpButton.setOutlineThickness(1.f);
     helpButton.setOutlineColor(sf::Color::White);
 
@@ -79,7 +79,7 @@ Display::Display() : window(sf::VideoMode({1400, 1050}), "Instagram Follower Ana
     titleText.setFont(font);
     titleText.setString("Instagram Follower Analyzer");
     titleText.setCharacterSize(48);
-    titleText.setPosition({70.f, 55.f});
+    titleText.setPosition({70.f, 50.f});
     titleText.setFillColor(sf::Color::White);
 
     subtitleText.setFont(font);
@@ -91,7 +91,7 @@ Display::Display() : window(sf::VideoMode({1400, 1050}), "Instagram Follower Ana
     statusText.setFont(font);
     statusText.setCharacterSize(18);
     statusText.setFillColor(sf::Color::Green);
-    statusText.setPosition({1050.f, 90.f});
+    statusText.setPosition({1050.f, 75.f});
     statusText.setString("Ready");
 
     loadButton.setSize({620.f, 100.f});
@@ -124,6 +124,24 @@ Display::Display() : window(sf::VideoMode({1400, 1050}), "Instagram Follower Ana
     datasetInputText.setPosition({195.f, 278.f});
     datasetInputText.setFillColor(sf::Color::White);
 
+    overlapLabel.setFont(font);
+    overlapLabel.setCharacterSize(18);
+    overlapLabel.setFillColor(sf::Color::White);
+    overlapLabel.setString("Overlap %: ");
+    overlapLabel.setPosition({400.f, 280.f});
+
+    overlapInputBox.setSize({120.f, 40.f});
+    overlapInputBox.setPosition({520.f, 272.f});
+    overlapInputBox.setFillColor(sf::Color(20, 25, 65));
+    overlapInputBox.setOutlineThickness(2.f);
+    overlapInputBox.setOutlineColor(sf::Color(60, 60, 120));
+
+    overlapInputText.setFont(font);
+    overlapInputText.setCharacterSize(20);
+    overlapInputText.setString(overlapInput);
+    overlapInputText.setPosition({535.f, 278.f});
+    overlapInputText.setFillColor(sf::Color::White);
+
     analyzeButton.setSize({1280.f, 60.f});
     analyzeButton.setPosition({40.f, 330.f});
     analyzeButton.setFillColor(sf::Color(20, 25, 65));
@@ -148,7 +166,7 @@ Display::Display() : window(sf::VideoMode({1400, 1050}), "Instagram Follower Ana
     analyzeText.setCharacterSize(32);
     analyzeText.setString("Analyze Followers");
     analyzeText.setStyle(sf::Text::Bold);
-    analyzeText.setPosition({80.f, 342.f});
+    analyzeText.setPosition({530.f, 342.f});
     analyzeText.setFillColor(sf::Color::White);
 
     card1.setSize({400.f, 110.f});
@@ -172,28 +190,28 @@ Display::Display() : window(sf::VideoMode({1400, 1050}), "Instagram Follower Ana
     card1Text.setFont(font);
     card1Text.setCharacterSize(26);
     card1Text.setStyle(sf::Text::Bold);
-    card1Text.setPosition({80.f, 420.f});
+    card1Text.setPosition({80.f, 430.f});
     card1Text.setFillColor(sf::Color::White);
 
     card2Text.setFont(font);
     card2Text.setCharacterSize(26);
     card2Text.setStyle(sf::Text::Bold);
-    card2Text.setPosition({520.f, 420.f});
+    card2Text.setPosition({520.f, 430.f});
     card2Text.setFillColor(sf::Color::White);
 
     card3Text.setFont(font);
     card3Text.setCharacterSize(26);
     card3Text.setStyle(sf::Text::Bold);
-    card3Text.setPosition({960.f, 420.f});
+    card3Text.setPosition({960.f, 430.f});
     card3Text.setFillColor(sf::Color::White);
 
     followersTotalText.setFont(font);
     followersTotalText.setCharacterSize(18);
-    followersTotalText.setPosition({850.f, 80.f});
+    followersTotalText.setPosition({850.f, 65.f});
 
     followingTotalText.setFont(font);
     followingTotalText.setCharacterSize(18);
-    followingTotalText.setPosition({850.f, 110.f});
+    followingTotalText.setPosition({850.f, 95.f});
 
     resultsPanel.setSize({1280.f, 320.f});
     resultsPanel.setPosition({40.f, 530.f});
@@ -242,27 +260,19 @@ Display::Display() : window(sf::VideoMode({1400, 1050}), "Instagram Follower Ana
     notFollowingTabText.setCharacterSize(18);
     notFollowingTabText.setFillColor(sf::Color::White);
     notFollowingTabText.setString("Not Following Back");
-    notFollowingTabText.setPosition({95.f, 618.f});
+    notFollowingTabText.setPosition({90.f, 620.f});
 
     dontFollowTabText.setFont(font);
     dontFollowTabText.setCharacterSize(18);
     dontFollowTabText.setFillColor(sf::Color::White);
     dontFollowTabText.setString("You Don't Follow Back");
-    dontFollowTabText.setPosition({530.f, 618.f});
+    dontFollowTabText.setPosition({515.f, 620.f});
 
     mutualTabText.setFont(font);
     mutualTabText.setCharacterSize(18);
     mutualTabText.setFillColor(sf::Color::White);
     mutualTabText.setString("Mutual");
-    mutualTabText.setPosition({910.f, 618.f});
-
-    // loadFollowersButton.setSize({620.f, 100.f});
-    // loadFollowersButton.setPosition({40.f, 170.f});
-    // loadFollowersText.setString("Load Followers");
-    //
-    // loadFollowingButton.setSize({620.f, 100.f});
-    // loadFollowingButton.setPosition({700.f, 170.f});
-    // loadFollowingText.setString("Load Following");
+    mutualTabText.setPosition({935.f, 620.f});
 }
 
 void Display::run() {
@@ -298,15 +308,25 @@ void Display::processEvents() {
             }
             if (buttonPressed(generateButton, mousePos)) {
                 currentView = ListView::NOT_FOLLOWING_BACK;
+
                 analyzer.reset();
                 scrollOffset = 0;
+
                 size_t datasetSize = 50000;
                 if (!datasetInput.empty()) {
                     datasetSize = std::stoull(datasetInput);
                 }
                 datasetSize = std::max<size_t>(100, datasetSize);
                 datasetSize = std::min<size_t>(100000, datasetSize);
-                generator.generateData(datasetSize, followers, following);
+
+                double overlapPercent = 25.0;
+                if (!overlapInput.empty()) {
+                    overlapPercent = std::stod(overlapInput);
+                }
+                overlapPercent = std::max(0.0, overlapPercent);
+                overlapPercent = std::min(100.0, overlapPercent);
+
+                generator.generateData(datasetSize, followers, following, overlapPercent);
                 statusText.setString("Generated: " + to_string(datasetSize) + " users");
                 statusText.setFillColor(sf::Color::Green);
             }
@@ -327,14 +347,25 @@ void Display::processEvents() {
             }
             if (datasetInputBox.getGlobalBounds().contains(mousePos)) {
                 enteringDatasetSize = true;
+                enteringOverlap = false;
                 if (firstDatasetClick) {
                     datasetInput.clear();
                     datasetInputText.setString("");
                     firstDatasetClick = false;
                 }
             }
+            else if (overlapInputBox.getGlobalBounds().contains(mousePos)) {
+                enteringOverlap = true;
+                enteringDatasetSize = false;
+                if (firstOverlapClick) {
+                    overlapInput.clear();
+                    overlapInputText.setString("");
+                    firstOverlapClick = false;
+                }
+            }
             else {
                 enteringDatasetSize = false;
+                enteringOverlap = false;
             }
         }
         if (const auto* text = event->getIf<sf::Event::TextEntered>()) {
@@ -349,6 +380,24 @@ void Display::processEvents() {
                     datasetInput.pop_back();
                 }
                 datasetInputText.setString(datasetInput);
+            }
+            if (enteringOverlap) {
+                char c = static_cast<char>(text->unicode);
+                if (isdigit(c)) {
+                    if (overlapInput.size() < 3) {
+                        overlapInput += c;
+                        if (!overlapInput.empty()) {
+                            int value = stoi(overlapInput);
+                            if (value > 100) {
+                                overlapInput = "100";
+                            }
+                        }
+                    }
+                }
+                else if (text->unicode == 8 && !overlapInput.empty()) {
+                    overlapInput.pop_back();
+                }
+                overlapInputText.setString(overlapInput);
             }
         }
         if (const auto* wheel = event->getIf<sf::Event::MouseWheelScrolled>()) {
@@ -534,15 +583,22 @@ void Display::render() {
 
     window.draw(dashboardPanel);
     window.draw(headerPanel);
+
     window.draw(titleText);
     window.draw(subtitleText);
     window.draw(statusText);
 
     window.draw(loadButton);
     window.draw(generateButton);
+
     window.draw(datasetLabel);
     window.draw(datasetInputBox);
     window.draw(datasetInputText);
+
+    window.draw(overlapLabel);
+    window.draw(overlapInputBox);
+    window.draw(overlapInputText);
+
     window.draw(analyzeButton);
 
     window.draw(loadText);
@@ -583,6 +639,12 @@ void Display::update() {
     }
     else {
         datasetInputBox.setOutlineColor(sf::Color(60, 60, 120));
+    }
+    if (enteringOverlap) {
+        overlapInputBox.setOutlineColor(sf::Color(34, 134, 255));
+    }
+    else {
+        overlapInputBox.setOutlineColor(sf::Color(60, 60, 120));
     }
 }
 
@@ -661,6 +723,8 @@ void Display::drawHelp() {
     "   Select your Instagram followers and following JSON files (FOLLOWER FILE FIRST).\n\n"
     "2. GENERATE DATA\n"
     "   Or enter a dataset size and generate sample usernames.\n\n"
+    "3. OVERLAP PERCENTAGE\n"
+    "   Or enter an overlap percentage to change the amount of mutuals.\n\n"
     "3. ANALYZE FOLLOWERS\n"
     "   Click Analyze Followers to compare the datasets.\n\n"
     "4. VIEW RESULTS\n"
@@ -673,7 +737,7 @@ void Display::drawHelp() {
 
     instructions.setCharacterSize(21);
     instructions.setLineSpacing(1.15f);
-    instructions.setPosition({290.f,225.f});
+    instructions.setPosition({290.f,220.f});
     instructions.setFillColor(sf::Color(220,225,240));
     window.draw(instructions);
 
@@ -681,7 +745,7 @@ void Display::drawHelp() {
     sf::Text closeText(font);
     closeText.setString("Click ? again to return to dashboard");
     closeText.setCharacterSize(18);
-    closeText.setPosition({290.f,775.f});
+    closeText.setPosition({290.f,780.f});
     closeText.setFillColor(sf::Color(100,200,255));
     window.draw(closeText);
 }
